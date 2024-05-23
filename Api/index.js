@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(responseMiddleware)
+app.use(responseMiddleware);
 app.use(express.json());
 
 try {
@@ -24,3 +24,13 @@ try {
 
 app.use("/api/user", userRoutes);
 app.use("/api", authRoutes);
+
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Server internal error";
+    return res.status(statusCode).json({
+        success: false,
+        message,
+        statusCode,
+    });
+});
