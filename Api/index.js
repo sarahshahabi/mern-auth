@@ -2,10 +2,15 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import responseMiddleware from "./middlewares/responseMiddlewares.js";
 
 dotenv.config();
 
 const app = express();
+
+app.use(responseMiddleware)
+app.use(express.json());
 
 try {
     await mongoose.connect(process.env.MONGO_URL);
@@ -18,3 +23,4 @@ try {
 }
 
 app.use("/api/user", userRoutes);
+app.use("/api", authRoutes);
