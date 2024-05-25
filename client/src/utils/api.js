@@ -2,12 +2,21 @@ import axios from "axios";
 
 axios.defaults.baseURL = SERVER_URL;
 
-export default async function signup(formData) {
+export async function signup(formData) {
     try {
         const { data } = await axios.post("auth/api/signup", formData);
         return data;
     } catch (e) {
-       return getError(e);
+        return getError(e);
+    }
+}
+
+export async function signin(formData) {
+    try {
+        const { data } = await axios.post("auth/api/signin", formData);
+        return data;
+    } catch (e) {
+        return getError(e);
     }
 }
 

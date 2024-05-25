@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import signup from "../utils/api";
+import { signup } from "../utils/api";
 
 function SignUp() {
     const [formData, setFormData] = useState({});
@@ -67,7 +67,7 @@ function SignUp() {
                 />
 
                 <button className="bg-slate-700 p-3 rounded-lg text-white uppercase hover:opacity-95 cursor-pointer disabled:opacity-80">
-                    {isLoading ? "Is Loading..." : "SignUp"}
+                    {isLoading ? "Is Loading..." : "Sign Up"}
                 </button>
             </form>
 

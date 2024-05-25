@@ -40,9 +40,7 @@ export async function signinUser(req, res) {
                     const expiryDate = new Date(Date.now() + 3600000);
                     res.cookie("access-token", token, { httpOnly: true, expires: expiryDate })
                         .status(200)
-                        .json({
-                            user,
-                        });
+                        .success("User signed in successfully", user, 200);
                 } else {
                     res.fail("Username or Password isn't correct");
                 }
