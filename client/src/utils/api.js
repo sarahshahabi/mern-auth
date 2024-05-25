@@ -4,7 +4,7 @@ axios.defaults.baseURL = SERVER_URL;
 
 export default async function signup(formData) {
     try {
-        const { data } = await axios.post("/api/signup", formData);
+        const { data } = await axios.post("auth/api/signup", formData);
         return data;
     } catch (e) {
        return getError(e);

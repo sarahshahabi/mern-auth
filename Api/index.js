@@ -25,7 +25,8 @@ try {
 }
 
 app.use("/api/user", userRoutes);
-app.use("/api", authRoutes);
+app.use("/auth/api", authRoutes);
+
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;

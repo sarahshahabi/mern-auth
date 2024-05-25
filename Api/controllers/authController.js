@@ -1,5 +1,6 @@
 import User from "../models/userSchema.js";
 import bcryptjs from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export async function signupUser(req, res) {
     const { username, email, password } = req.body;
@@ -23,5 +24,35 @@ export async function signupUser(req, res) {
         }
     } else {
         res.fail("Provide all required fields, please", 404);
+    }
+}
+
+export async function signinUser(req, res) {
+    const { email, password } = req.body;
+    if (email && password) {
+        try {
+            const user = await User.findOne({ email });
+            if (user) {
+                const matchedPassword = await bcryptjs.compare(password, user.password);
+                if (matchedPassword) {
+                    const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
+                    user.password = undefined;
+                    const expiryDate = new Date(Date.now() + 3600000);
+                    res.cookie("access-token", token, { httpOnly: true, expires: expiryDate })
+                        .status(200)
+                        .json({
+                            user,
+                        });
+                } else {
+                    res.fail("Username or Password isn't correct");
+                }
+            } else {
+                res.fail("User not found", 404);
+            }
+        } catch (e) {
+            res.fail(e.message, 500);
+        }
+    } else {
+        res.fail("Please Provilde username and password");
     }
 }
