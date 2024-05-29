@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signin } from "../utils/api";
+import { useDispatch, useSelector } from "react-redux";
+import { userActions } from "../stores/slices/userSlice";
 
 function SignUp() {
     const [formData, setFormData] = useState({});
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(false);
     const [successMessage, setSuccessMessage] = useState(false);
+
+    const isLoading = useSelector((state) => state.user.isLoading);
+    const error = useSelector((state) => state.user.error);
+    
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     function handleChangeInput(e) {
         setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -15,18 +20,18 @@ function SignUp() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        setError(false);
-        setIsLoading(true);
+        dispatch(userActions.setError(false));
+        dispatch(userActions.setIsLoading(true));
         const result = await signin(formData);
-        console.log(result);
+        console.log(result)
         if (result.success) {
             setSuccessMessage(result.message);
-            setError(false);
+            dispatch(userActions.setUser(result.body));
             setTimeout(() => navigate("/"), 2000);
         } else {
-            setError(result.message);
+            dispatch(userActions.setError(result.message));
         }
-        setIsLoading(false);
+        dispatch(userActions.setIsLoading(false));
     }
 
     return (
