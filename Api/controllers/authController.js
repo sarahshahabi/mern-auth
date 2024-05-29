@@ -51,6 +51,6 @@ export async function signinUser(req, res) {
             res.fail(e.message, 500);
         }
     } else {
-        res.fail("Please Provilde username and password");
+        res.fail("Please Provilde username and password", 409);
     }
 }
