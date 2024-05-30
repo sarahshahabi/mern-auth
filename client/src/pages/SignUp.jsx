@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../utils/api";
+import OAuth from "../components/OAuth";
 
 function SignUp() {
     const [formData, setFormData] = useState({});
@@ -18,10 +19,10 @@ function SignUp() {
         setError(false);
         setIsLoading(true);
         const result = await signup(formData);
-        console.log(result)
+        console.log(result);
         if (result.success) {
             setSuccessMessage(result.message);
-            setError(false)
+            setError(false);
             setTimeout(() => navigate("/sign-in"), 2000);
         } else {
             setError(result.message);
@@ -69,6 +70,8 @@ function SignUp() {
                 <button className="bg-slate-700 p-3 rounded-lg text-white uppercase hover:opacity-95 cursor-pointer disabled:opacity-80">
                     {isLoading ? "Is Loading..." : "Sign Up"}
                 </button>
+
+                <OAuth />
             </form>
 
             <div className="flex gap-2">

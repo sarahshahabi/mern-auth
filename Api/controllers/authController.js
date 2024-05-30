@@ -54,3 +54,38 @@ export async function signinUser(req, res) {
         res.fail("Please Provilde username and password", 409);
     }
 }
+
+export async function signInOrUpWithGoogle(req, res) {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        if (user) {
+            const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
+            const { password: hashedPassword, ...rest } = user._doc;
+            const expiryDate = new Date(Date.now() + 3600000);
+            res.cookie("access-token", token, { httpOnly: true, expires: expiryDate })
+                .status(200)
+                .success("User signed in successfully With google", rest, 200);
+        } else {
+            const generatedPassword =
+                Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const hashedPassword = await bcryptjs.hash(generatedPassword, 10);
+            const newUser = new User({
+                username:
+                    req.body.name.split(" ").join("").toLowerCase() +
+                    Math.floor(Math.random() * 1000).toString(),
+                email: req.body.email,
+                password: hashedPassword,
+                profilePicture: req.body.photo,
+            });
+            await newUser.save();
+            const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY);
+            newUser.password = undefined;
+            const expiryDate = new Date(Date.now() + 3600000);
+            res.cookie("access-token", token, { httpOnly: true, expires: expiryDate })
+                .status(200)
+                .success("User signed up successfully with google", newUser, 200);
+        }
+    } catch (e) {
+        res.fail("There is a internall Error");
+    }
+}

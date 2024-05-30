@@ -1,18 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signin } from "../utils/api";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../stores/slices/userSlice";
+import OAuth from "../components/OAuth";
 
 function SignUp() {
     const [formData, setFormData] = useState({});
     const [successMessage, setSuccessMessage] = useState(false);
 
     const isLoading = useSelector((state) => state.user.isLoading);
-    const error = useSelector((state) => state.user.error);
-    
+    let error = useSelector((state) => state.user.error);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        (document.title = "Sign In"), dispatch(userActions.setError(false));
+    }, []);
 
     function handleChangeInput(e) {
         setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -23,7 +28,7 @@ function SignUp() {
         dispatch(userActions.setError(false));
         dispatch(userActions.setIsLoading(true));
         const result = await signin(formData);
-        console.log(result)
+        console.log(result);
         if (result.success) {
             setSuccessMessage(result.message);
             dispatch(userActions.setUser(result.body));
@@ -67,6 +72,7 @@ function SignUp() {
                 <button className="bg-slate-700 p-3 rounded-lg text-white uppercase hover:opacity-95 cursor-pointer disabled:opacity-80">
                     {isLoading ? "Is Loading..." : "Sign In"}
                 </button>
+                <OAuth />
             </form>
 
             <div className="flex gap-2">

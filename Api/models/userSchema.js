@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        profilePicture: {
+            type: String,
+            default: "https://vectorified.com/images/no-profile-picture-icon-8.jpg",
+        },
     },
     { timestamps: true }
 );

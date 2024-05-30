@@ -20,6 +20,15 @@ export async function signin(formData) {
     }
 }
 
+export async function signInOrUpWithGoogle(formData) {
+    try {
+        const { data } = await axios.post("/auth/api/google", formData);
+        return data;
+    } catch (e) {
+        return getError(e);
+    }
+}
+
 function getError(e) {
     if (!e.response) {
         return { success: false, message: "ERROR" };
