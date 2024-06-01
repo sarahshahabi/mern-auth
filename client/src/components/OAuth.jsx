@@ -3,8 +3,10 @@ import { app } from "../firebase";
 import { signInOrUpWithGoogle } from "../utils/api";
 import {useDispatch} from "react-redux"
 import { userActions } from "../stores/slices/userSlice.js";
+import { useNavigate } from "react-router";
 
 function OAuth() {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     async function handleGoogleClick() {
         try {
@@ -17,6 +19,7 @@ function OAuth() {
                 photo: result.user.photoURL,
             });
             dispatch(userActions.setUser(userData))
+            navigate("/")
             
         } catch (e) {
             console.log("Could not login with google", e.message);
