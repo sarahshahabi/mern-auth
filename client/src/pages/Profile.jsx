@@ -5,14 +5,16 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/
 import { app } from "../firebase";
 
 function Profile() {
+    const currentUser = useSelector((state) => state.user.user);
+
     const [isLoading, setIsLoading] = useState(false);
-    const [image, setImage] = useState("");
+    const [image, setImage] = useState(undefined);
     const [imagePercent, setImagePercent] = useState(0);
     const [imageError, setImageError] = useState(false);
     const [formData, setFormData] = useState({});
     const fileRef = useRef(null);
-    const currentUser = useSelector((state) => state.user.user);
     const navigate = useNavigate();
+    console.log(currentUser)
 
     useEffect(() => {
         if (currentUser === null) {
@@ -27,7 +29,6 @@ function Profile() {
     }, [image]);
 
     async function handleFileUpload(image) {
-        // Create a root reference
         const storage = getStorage(app);
         const fileName = new Date().getTime() + image.name;
         const storageRef = ref(storage, fileName);
@@ -61,11 +62,10 @@ function Profile() {
                     accept="image/*"
                     onChange={(e) => setImage(e.target.files[0])}
                 />
-
                 <img
-                    src={currentUser.body.profilePicture}
+                    src={formData.profilePicture || currentUser.body.profilePicture}
+                    alt="profile"
                     className="w-20 h-20 object-cover rounded-full self-center cursor-pointer"
-                    alt="profile-image"
                     onClick={() => fileRef.current.click()}
                 />
 
