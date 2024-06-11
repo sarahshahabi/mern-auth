@@ -1,11 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import { app } from "../firebase";
 
 function Profile() {
+    const [isLoading, setIsLoading] = useState(false);
+    const [image, setImage] = useState("");
+    const [imagePercent, setImagePercent] = useState(0);
+    const [imageError, setImageError] = useState(false);
+    const [formData, setFormData] = useState({});
+    const fileRef = useRef(null);
     const currentUser = useSelector((state) => state.user.user);
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (currentUser === null) {
@@ -13,16 +20,66 @@ function Profile() {
         }
     }, []);
 
+    useEffect(() => {
+        if (image) {
+            handleFileUpload(image);
+        }
+    }, [image]);
+
+    async function handleFileUpload(image) {
+        // Create a root reference
+        const storage = getStorage(app);
+        const fileName = new Date().getTime() + image.name;
+        const storageRef = ref(storage, fileName);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+        uploadTask.on(
+            "state_changed",
+            (snapshop) => {
+                const progress = (snapshop.bytesTransferred / snapshop.totalBytes) * 100;
+                setImagePercent(Math.round(progress));
+            },
+            (error) => {
+                setImageError(true);
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
+                    setFormData({ ...formData, profilePicture: downloadURL })
+                );
+            }
+        );
+    }
+
     return (
         <div className="flex flex-col items-center max-w-4xl mx-auto">
             <h1 className="text-4xl font-semibold text-center my-12">Profile</h1>
 
-            <form className="flex flex-col gap-4 p-3 w-96 p-0">
+            <form className="flex flex-col gap-4 w-96 p-0">
+                <input
+                    type="file"
+                    ref={fileRef}
+                    hidden
+                    accept="image/*"
+                    onChange={(e) => setImage(e.target.files[0])}
+                />
+
                 <img
                     src={currentUser.body.profilePicture}
-                    className="w-20 h-20 object-cover rounded-full self-center   "
+                    className="w-20 h-20 object-cover rounded-full self-center cursor-pointer"
                     alt="profile-image"
+                    onClick={() => fileRef.current.click()}
                 />
+
+                <p className="text-center font-semibold text-sm">
+                    {imageError ? (
+                        <span className="text-red-700">Error Uploading Image</span>
+                    ) : imagePercent > 0 && imagePercent < 100 ? (
+                        <span className="text-orange-400">{`Uploading: ${imagePercent}%`}</span>
+                    ) : imagePercent === 100 ? (
+                        <span className="text-green-600">Image uploaded successfully</span>
+                    ) : (
+                        ""
+                    )}
+                </p>
 
                 <input
                     type="text"
