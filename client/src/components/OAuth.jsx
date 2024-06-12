@@ -18,7 +18,7 @@ function OAuth() {
                 email: result.user.email,
                 photo: result.user.photoURL,
             });
-            dispatch(userActions.setUser(userData))
+            dispatch(userActions.setUser(userData.body))
             navigate("/")
             
         } catch (e) {

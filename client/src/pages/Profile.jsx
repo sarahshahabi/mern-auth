@@ -62,8 +62,8 @@ function Profile() {
                     accept="image/*"
                     onChange={(e) => setImage(e.target.files[0])}
                 />
-                <img
-                    src={formData.profilePicture || currentUser.body.profilePicture}
+                <img  
+                    src={formData.profilePicture || currentUser.profilePicture}
                     alt="profile"
                     className="w-20 h-20 object-cover rounded-full self-center cursor-pointer"
                     onClick={() => fileRef.current.click()}
@@ -86,7 +86,7 @@ function Profile() {
                     placeholder="Username"
                     id="username"
                     className="bg-slate-100 p-3 rounded-lg"
-                    value={currentUser.body.username}
+                    value={currentUser.username}
                 />
 
                 <input
@@ -94,7 +94,7 @@ function Profile() {
                     placeholder="Email"
                     id="email"
                     className="bg-slate-100 p-3 rounded-lg"
-                    value={currentUser.body.email}
+                    value={currentUser.email}
                 />
 
                 <input
