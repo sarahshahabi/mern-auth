@@ -38,7 +38,7 @@ export async function signinUser(req, res) {
                     const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
                     user.password = undefined;
                     const expiryDate = new Date(Date.now() + 3600000);
-                    res.cookie("access-token", token, { httpOnly: true, expires: expiryDate })
+                    res.cookie("access_token", token, { httpOnly: true, expires: expiryDate })
                         .status(200)
                         .success("User signed in successfully", user, 200);
                 } else {
