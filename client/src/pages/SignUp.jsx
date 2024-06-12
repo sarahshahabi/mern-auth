@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { userActions } from "../stores/slices/userSlice";
+
 import { signup } from "../utils/api";
 import OAuth from "../components/OAuth";
 
@@ -9,6 +12,9 @@ function SignUp() {
     const [error, setError] = useState(false);
     const [successMessage, setSuccessMessage] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+  
 
     function handleChangeInput(e) {
         setFormData({ ...formData, [e.target.id]: e.target.value });

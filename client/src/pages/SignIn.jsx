@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../stores/slices/userSlice";
 import OAuth from "../components/OAuth";
 
-function SignUp() {
+function SignIn() {
     const [formData, setFormData] = useState({});
     const [successMessage, setSuccessMessage] = useState(false);
 
@@ -28,7 +28,6 @@ function SignUp() {
         dispatch(userActions.setError(false));
         dispatch(userActions.setIsLoading(true));
         const result = await signin(formData);
-        console.log(result);
         if (result.success) {
             setSuccessMessage(result.message);
             dispatch(userActions.setUser(result.body));
@@ -85,4 +84,4 @@ function SignUp() {
     );
 }
 
-export default SignUp;
+export default SignIn;

@@ -1,8 +1,16 @@
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function Header() {
-    const  currentUser  = useSelector((state) => state.user.user);
-    console.log(currentUser)
+    const currentUser = useSelector((state) => state.user.user);
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        if (currentUser === null) {
+            navigate("/");
+        }
+    }, []);
+
     return (
         <div className="bg-slate-200">
             <div className="flex justify-between items-center max-w-6xl mx-auto p-3 ">
@@ -13,10 +21,21 @@ function Header() {
 
                     <Link to={"/about"}>
                         <li>About us</li>
-                    </Link>  
+                    </Link>
 
-                    {currentUser ? <Link to={"/profile"}><img src={currentUser.profilePicture} alt="user-Profile" className="w-10 h-10 rounded-full object-cover "/></Link> : <Link to={"/sign-in"}><li>Sign in</li></Link>}
-
+                    {currentUser ? (
+                        <Link to={"/profile"}>
+                            <img
+                                src={currentUser.profilePicture}
+                                alt="user-Profile"
+                                className="w-10 h-10 rounded-full object-cover "
+                            />
+                        </Link>
+                    ) : (
+                        <Link to={"/sign-in"}>
+                            <li>Sign in</li>
+                        </Link>
+                    )}
                 </ul>
 
                 <Link to={"/"}>

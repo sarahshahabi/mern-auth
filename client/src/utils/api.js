@@ -4,7 +4,7 @@ axios.defaults.baseURL = SERVER_URL;
 
 export async function signup(formData) {
     try {
-        const { data } = await axios.post("auth/api/signup", formData);
+        const { data } = await axios.post("api/auth/signup", formData);
         return data;
     } catch (e) {
         return getError(e);
@@ -13,7 +13,7 @@ export async function signup(formData) {
 
 export async function signin(formData) {
     try {
-        const { data } = await axios.post("auth/api/signin", formData);
+        const { data } = await axios.post("api/auth/signin", formData);
         return data;
     } catch (e) {
         return getError(e);
@@ -22,7 +22,7 @@ export async function signin(formData) {
 
 export async function signInOrUpWithGoogle(formData) {
     try {
-        const { data } = await axios.post("/auth/api/google", formData);
+        const { data } = await axios.post("/api/auth/google", formData);
         return data;
     } catch (e) {
         return getError(e);
