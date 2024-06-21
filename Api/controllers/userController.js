@@ -44,11 +44,15 @@ export async function deleteUser(req, res) {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (user) {
-            res.success("کاربر با موفقیت حذف شد");
+            res.success("User has deleted successfully", 200);
         } else {
-            res.fail("کاربر یافت نشد", 404 );
+            res.fail("There isn't user", 404);
         }
     } catch (e) {
-        res.fail("مشکلی در اجرای درخواست پیش امده", 500);
+        res.fail("Internal error", 500);
     }
+}
+
+export async function signoutUser(req, res) {
+    res.clearCookie("access_token").success("You're signed out successfully", null, 200);
 }

@@ -43,6 +43,10 @@ const userSlice = createSlice({
             state.isLoading = false;
             state.error = action.payload;
         },
+        setSignedout(state) {
+            (state.user = null), (state.isLoading = false);
+            state.error = null;
+        },
     },
 });
 

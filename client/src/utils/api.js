@@ -1,7 +1,5 @@
 import axios from "axios";
 
-
-
 export async function signup(formData) {
     try {
         const { data } = await axios.post("api/auth/signup", formData);
@@ -31,10 +29,7 @@ export async function signInOrUpWithGoogle(formData) {
 
 export async function updateUserById(id, formData) {
     try {
-        const { data } = await axios.post(
-            `/api/user/update/${id}`,
-            formData
-        );
+        const { data } = await axios.put(`/api/user/update/${id}`, formData);
         return data;
     } catch (e) {
         return getError(e);
@@ -47,6 +42,15 @@ export async function deleteAccount(id) {
         return data;
     } catch (e) {
         return getError(e);
+    }
+}
+
+export async function signOutUser() {
+    try {
+        const { data } = await axios.get("/api/auth/signout");
+        return data;
+    } catch (e) {
+        return getError();
     }
 }
 

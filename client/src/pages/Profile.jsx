@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from "../firebase.js";
 import SignIn from "./SignIn";
-import { deleteAccount, updateUserById } from "../utils/api";
+import { deleteAccount, signOutUser, updateUserById } from "../utils/api";
 import { userActions } from "../stores/slices/userSlice.js";
 
 function Profile() {
@@ -67,7 +67,7 @@ function Profile() {
         dispatch(userActions.setUpdateUserStart());
         try {
             const result = await updateUserById(currentUser._id, formData);
-            console.log(result)
+            console.log(result);
             if (result.success) {
                 dispatch(userActions.setUpdatedUser(result.body));
                 setSuccessmessage("Your account has updated successfully");
@@ -84,14 +84,29 @@ function Profile() {
 
     async function handleDeleteAccount() {
         dispatch(userActions.setDeleteUserStart(true));
-        const result = await deleteAccount(currentUser._id);
-        console.log(result)
-        if (result.success) {
-            dispatch(userActions.deletedUserSuuccess(result));
-        } else {
-            dispatch(userActions.setUserDeletedError(result));
+
+        if (confirm("are you sure to delete this user")) {
+            const result = await deleteAccount(currentUser._id);
+            if (result.success) {
+                dispatch(userActions.deletedUserSuuccess(result));
+            } else {
+                dispatch(userActions.setUserDeletedError(result));
+            }
         }
+
         dispatch(userActions.setDeleteUserStart(false));
+    }
+
+
+    async function handleSignedout() {
+        const result = await signOutUser()
+        if (result.success) {
+            dispatch(userActions.setSignedout())
+            navigate("/sign-in")
+        } else {
+            console.log(result.message)
+        }
+        
     }
 
     if (currentUser === null) {
@@ -167,8 +182,12 @@ function Profile() {
                 </form>
 
                 <div className="my-6 flex justify-between w-96 p-0 m-0 text-red-700 cursor-pointer">
-                    <span onClick={handleDeleteAccount}>Delete account</span>
-                    <span>Sign out</span>
+                    {isLoading ? (
+                        <span>User is deleting...</span>
+                    ) : (
+                        <span onClick={handleDeleteAccount}>Delete account</span>
+                    )}
+                    <span onClick={handleSignedout}>Sign out</span>
                 </div>
 
                 <p className="text-red-600 font-bold  ">{error && error}</p>
