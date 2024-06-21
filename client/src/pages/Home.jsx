@@ -1,9 +1,29 @@
-import React from 'react'
+import React from "react";
 
 function Home() {
-  return (
-    <h3 className='text-red-500 text-center'>Home</h3>
-  )
+    return (
+        <div className="px-4 py-12 mx-auto  max-w-2xl">
+            <h1 className="text-3xl font-bold mb-8 text-slate-700 text-center ">
+                Welcome to my Mern Auth App!
+            </h1>
+            <p className="mb-4 text-slate-700 leading-8 text-xl  ">
+                This is a full-stack web application built with the MERN (MongoDB, Express, React,
+                Node.js) stack. It includes authentication features that allow users to sign up, log
+                in, and log out, and provides access to protected routes only for authenticated
+                users.
+            </p>
+            <p className="mb-4 text-slate-700 leading-8 text-xl ">
+                The front-end of the application is built with React and uses React Router for
+                client-side routing. The back-end is built with Node.js and Express, and uses
+                MongoDB as the database. Authentication is implemented using JSON Web Tokens (JWT).
+            </p>
+            <p className="mb-4 text-slate-700 leading-8 text-xl ">
+                This application is intended as a starting point for building full-stack web
+                applications with authentication using the MERN stack. Feel free to use it as a
+                template for your own projects!
+            </p>
+        </div>
+    );
 }
 
-export default Home
+export default Home;
