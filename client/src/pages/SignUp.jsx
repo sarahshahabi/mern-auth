@@ -12,7 +12,6 @@ function SignUp() {
     const [error, setError] = useState(false);
     const [successMessage, setSuccessMessage] = useState(false);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
   
 
@@ -25,7 +24,6 @@ function SignUp() {
         setError(false);
         setIsLoading(true);
         const result = await signup(formData);
-        console.log(result);
         if (result.success) {
             setSuccessMessage(result.message);
             setError(false);
