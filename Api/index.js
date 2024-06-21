@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import responseMiddleware from "./middlewares/responseMiddlewares.js";
-import corsMiddlewares from "./middlewares/corsMiddlewares.js";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -12,7 +11,6 @@ dotenv.config();
 const app = express();
 
 app.use(responseMiddleware);
-app.use(corsMiddlewares);
 app.use(express.json());
 app.use(cookieParser())
 
