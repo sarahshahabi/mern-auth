@@ -38,9 +38,13 @@ export async function signinUser(req, res) {
                     const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
                     user.password = undefined;
                     const expiryDate = new Date(Date.now() + 3600000);
-                    res.cookie("access_token", token, { httpOnly: true, expires: expiryDate })
-                        .status(200)
-                        .success("User signed in successfully", user, 200);
+                    res.cookie("access_token", token, {
+                        httpOnly: true,
+                        expires: expiryDate,
+                        secure: false,
+                    });
+
+                    res.success("User signed in successfully", user, 200);
                 } else {
                     res.fail("Username or Password isn't correct");
                 }
@@ -62,9 +66,13 @@ export async function signInOrUpWithGoogle(req, res) {
             const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY);
             const { password: hashedPassword, ...rest } = user._doc;
             const expiryDate = new Date(Date.now() + 3600000);
-            res.cookie("access-token", token, { httpOnly: true, expires: expiryDate })
+            res.cookie("access_token", token, { httpOnly: true, expires: expiryDate })
                 .status(200)
-                .success("User signed in successfully With google", rest, 200);
+                .json({
+                    message: "User signed in with google successfully",
+                    body: rest,
+                    code: 200,
+                });
         } else {
             const generatedPassword =
                 Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
@@ -79,11 +87,16 @@ export async function signInOrUpWithGoogle(req, res) {
             });
             await newUser.save();
             const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY);
+            console.log(token);
             newUser.password = undefined;
             const expiryDate = new Date(Date.now() + 3600000);
-            res.cookie("access-token", token, { httpOnly: true, expires: expiryDate })
+            res.cookie("access_token", token, { httpOnly: true, expires: expiryDate })
                 .status(200)
-                .success("User signed up successfully with google", newUser, 200);
+                .json({
+                    message: "User signed up with google successfully",
+                    body: newUser,
+                    code: 200,
+                });
         }
     } catch (e) {
         res.fail("There is a internall Error");

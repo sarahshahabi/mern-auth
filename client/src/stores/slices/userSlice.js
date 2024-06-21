@@ -21,6 +21,28 @@ const userSlice = createSlice({
             state.isLoading = false;
             state.error = action.payload;
         },
+        setUpdateUserStart(state) {
+            state.isLoading = true;
+        },
+        setUpdatedUser(state, action) {
+            (state.isLoading = false), (state.error = false);
+            state.user = action.payload;
+        },
+        setUserUpdatedError(state, action) {
+            state.isLoading = false;
+            state.error = action.payload;
+        },
+        setDeleteUserStart(state) {
+            state.isLoading = true;
+        },
+        deletedUserSuuccess(state) {
+            (state.isLoading = false), (state.error = false);
+            state.user = null;
+        },
+        setUserDeletedError(state, action) {
+            state.isLoading = false;
+            state.error = action.payload;
+        },
     },
 });
 

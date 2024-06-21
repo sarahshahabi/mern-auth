@@ -1,6 +1,6 @@
 import axios from "axios";
 
-axios.defaults.baseURL = SERVER_URL;
+
 
 export async function signup(formData) {
     try {
@@ -23,6 +23,27 @@ export async function signin(formData) {
 export async function signInOrUpWithGoogle(formData) {
     try {
         const { data } = await axios.post("/api/auth/google", formData);
+        return data;
+    } catch (e) {
+        return getError(e);
+    }
+}
+
+export async function updateUserById(id, formData) {
+    try {
+        const { data } = await axios.post(
+            `/api/user/update/${id}`,
+            formData
+        );
+        return data;
+    } catch (e) {
+        return getError(e);
+    }
+}
+
+export async function deleteAccount(id) {
+    try {
+        const { data } = await axios.delete("/api/user/delete/" + id);
         return data;
     } catch (e) {
         return getError(e);
